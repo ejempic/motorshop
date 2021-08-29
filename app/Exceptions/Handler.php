@@ -60,9 +60,7 @@ class Handler extends ExceptionHandler
         if(config('app.env') == 'local'){
             return parent::render($request, $exception);
         }else{
-            return view('errors.soon');
-
-//            abort(404);
+            abort(404);
         }
     }
 }
