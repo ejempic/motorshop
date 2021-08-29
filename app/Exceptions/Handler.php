@@ -36,7 +36,13 @@ class Handler extends ExceptionHandler
      */
     public function report(Throwable $exception)
     {
-        parent::report($exception);
+//        if(config('app.env') == 'local'){
+            parent::report($exception);
+//        }else{
+//            abort(404);
+//        }
+//        return view('errors.soon');
+
     }
 
     /**
@@ -50,6 +56,13 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
-        return parent::render($request, $exception);
+
+        if(config('app.env') == 'local'){
+            return parent::render($request, $exception);
+        }else{
+            return view('errors.soon');
+
+//            abort(404);
+        }
     }
 }

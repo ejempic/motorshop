@@ -33,100 +33,17 @@
                     </div>
                     <div class="ibox-content">
                         {{Form::open(['route'=>'client.store'])}}
-                        <div class="row">
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label for="">Client</label>
-                                    <select name="client_id" id="" class="form-control">
-                                        @forelse($clients as $client)
-                                            <option value="{{$client->id}}">{{$client->name}}</option>
-                                        @empty
-                                            <option value="" selected disabled>No Clients Yet</option>
-                                        @endforelse
-                                    </select>
-                                </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">First Name</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control">
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label for="">Unit</label>
-                                    <select name="unit_id" id="" class="form-control">
-                                        @forelse($units as $unit)
-                                            <option value="{{$unit->id}}">{{$unit->chassis_no.' '.$unit->model.' '.$unit->color}}</option>
-                                        @empty
-                                            <option value="" selected disabled>No Clients Yet</option>
-                                        @endforelse
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label for="">Total Price</label>
-                                    <input type="text"  id="total_price" name="total_price" class="form-control money">
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label for="">Initial Payment</label>
-                                    <input type="text"  id="down_payment" name="down_payment" class="form-control money">
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label for="">Total less Initial Payment</label>
-                                    <input type="text" disabled id="total_less_downpayment" name="total_less_downpayment" class="form-control money">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label for="">Months</label>
-                                    <input type="text" id="months" name="months" class="form-control" data-mask="0#">
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label for="">Years</label>
-                                    <input type="text" disabled id="years" name="years" class="form-control money">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label for="">Gross Monthly Rate</label>
-                                    <input type="text" disabled id="gross_monthly_rate" name="gross_monthly_rate" class="form-control money">
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label for="">Less: Rebate</label>
-                                    <input type="text"  id="rebate" name="rebate" class="form-control money">
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label for="">Net Monthly Rate</label>
-                                    <input type="text" disabled id="net_monthly_rate" name="net_monthly_rate" class="form-control money">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label for="">First due date of amount (Gross)</label>
-                                    <input type="text" id="first_payment_due" name="first_payment_due" class="form-control money">
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label for="">First Due Date </label>
-                                    <input type="text" id="first_due_date" name="first_due_date" class="form-control datepicker">
-                                </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">First Name</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control">
                             </div>
                         </div>
                         <div class="row">

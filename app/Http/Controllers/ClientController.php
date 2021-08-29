@@ -13,4 +13,8 @@ class ClientController extends Controller
         $clients = Clients::all();
         return view('clients.index', compact('clients'));
     }
+    public function create()
+    {
+        return view('clients.create');
+    }
 }

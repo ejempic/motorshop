@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,16 +14,22 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', 'HomeController@index')->name('dashboard');
-Route::get('/dashboard', 'HomeController@index')->name('dashboard');
+Auth::routes(['register' => false,'reset'=>false]);
 
-Route::resource('client', 'ClientController');
-Route::resource('unit', 'UnitController');
-Route::resource('application', 'ApplicationController');
-Route::group(['prefix' => 'application/status/'],function(){
-    Route::get('active', 'ApplicationController@active')->name('application-status-active');
-    Route::get('overdue', 'ApplicationController@overdue')->name('application-status-overdue');
-    Route::get('history', 'ApplicationController@history')->name('application-status-history');
+Route::middleware(['auth'])->group(function(){
+    Route::get('/', 'HomeController@index')->name('dashboard');
+    Route::get('/dashboard', 'HomeController@index')->name('dashboard');
+
+    Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
+
+    Route::resource('client', 'ClientController');
+    Route::resource('unit', 'UnitController');
+    Route::resource('application', 'ApplicationController');
+    Route::group(['prefix' => 'application/status/'],function(){
+        Route::get('active', 'ApplicationController@active')->name('application-status-active');
+        Route::get('overdue', 'ApplicationController@overdue')->name('application-status-overdue');
+        Route::get('history', 'ApplicationController@history')->name('application-status-history');
+    });
+    Route::post('pay', 'PaymentController@store')->name('pay');
 });
-Route::post('pay', 'PaymentController@store')->name('pay');
 

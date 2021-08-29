@@ -20,6 +20,10 @@
     <link rel="stylesheet" href="/css/template/animate.css">
     <link rel="stylesheet" href="/css/template/style.css">
 
+{{--    {!! Html::style('/css/app.css') !!}--}}
+    {!! Html::style('/css/styles.css') !!}
+    {!! Html::style('/font-awesome/css/font-awesome.css') !!}
+    {!! Html::style('/css/template/animate.css') !!}
 
 
 
@@ -39,24 +43,22 @@
 
                 <li class="nav-header">
                     <div class="dropdown profile-element">
-                        <img alt="image" class="rounded-circle" src="/img/profile_small.jpg"/>
+                        <img alt="image" class="rounded-circle" src="/img/blank-profile.jpg" style="width: 48px;"/>
 {{--                        <img alt="image" class="rounded-circle profile-pic" src="{{ authProfilePic(Auth::user()->id) }}"/>--}}
                         {{--<img alt="image" class="rounded-circle profile-pic" src="/img/blank-profile.jpg"/>--}}
 {{--                        <img alt="image" class="img-fluid" src="{{ asset('img/a1.jpg') }}"/>--}}
+
                         <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-{{--                            <span class="block m-t-xs font-bold">{!! Auth::user()->name !!}</span>--}}
-{{--                            <span class="text-muted text-xs block">{{ getRoleName('display_name') }} <b class="caret"></b></span>--}}
-                            {{--<span class="text-muted text-xs block"> {{ getRoleName('display_name') }} <b class="caret"></b></span>--}}
                             <span class="block m-t-xs font-bold">Keisser Admin</span>
                             <span class="text-muted text-xs block"> Admin <b class="caret"></b></span>
                         </a>
-{{--                        <ul class="dropdown-menu animated fadeInRight m-t-xs">--}}
-{{--                            <li><a class="dropdown-item" href="#">Profile</a></li>--}}
-{{--                            <li><a class="dropdown-item" href="#">Contacts</a></li>--}}
-{{--                            <li><a class="dropdown-item" href="#">Mailbox</a></li>--}}
+                        <div style="position: relative">
+                        <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                            <li><a class="dropdown-item" href="#">Profile</a></li>
 {{--                            <li class="dropdown-divider"></li>--}}
 {{--                            <li><a class="dropdown-item btn-logout" href="#" id="">Logout</a></li>--}}
-{{--                        </ul>--}}
+                        </ul>
+                        </div>
                     </div>
                     <div class="logo-element">
                         Motor
@@ -90,7 +92,7 @@
                     {{-- slot for general notification --}}
 
                     <li>
-                        <a href="#" class="btn-logout"> <i class="fa fa-sign-out"></i> Log out </a>
+                        <a href="{{route('logout')}}" > <i class="fa fa-sign-out"></i> Log out </a>
                     </li>
                 </ul>
 
@@ -121,23 +123,21 @@
 
 <!-- Mainly scripts -->
 {{--<script src="/js/app.js"></script>--}}
-<script src="{{ URL::to('/js/app.js') }}"></script>
-{{--<script src="js/jquery-3.1.1.min.js"></script>--}}
-{{--<script src="/js/template/popper.min.js"></script>--}}
-<script src="{{ URL::to('/js/template/popper.min.js') }}"></script>
-{{--<script src="js/bootstrap.js"></script>--}}
-{{--<script src="/js/template/plugins/metisMenu/jquery.metisMenu.js"></script>--}}
-<script src="{{ URL::to('/js/template/plugins/metisMenu/jquery.metisMenu.js') }}"></script>
-{{--<script src="/js/template/plugins/slimscroll/jquery.slimscroll.min.js"></script>--}}
-<script src="{{ URL::to('/js/template/plugins/slimscroll/jquery.slimscroll.min.js') }}"></script>
+{!! Html::script('/js/app.js') !!}
+{!! Html::script('/js/template/popper.min.js') !!}
+{!! Html::script('/js/template/bootstrap.js') !!}
+{!! Html::script('/js/template/plugins/metisMenu/jquery.metisMenu.js') !!}
+{!! Html::script('/js/template/plugins/slimscroll/jquery.slimscroll.min.js') !!}
+
+<!-- Custom and plugin javascript -->
+{!! Html::script('/js/template/inspinia.js') !!}
+{!! Html::script('/js/template/plugins/pace/pace.min.js') !!}
 
 @yield('scripts')
 
+{{--{!! Html::script('/js/template/jquery-3.1.1.min.js') !!}--}}
 <!-- Custom and plugin javascript -->
 {{--<script src="/js/template/inspinia.js"></script>--}}
-<script src="{{ URL::to('/js/template/inspinia.js') }}"></script>
-{{--<script src="/js/template/plugins/pace/pace.min.js"></script>--}}
-<script src="{{ URL::to('/js/template/plugins/pace/pace.min.js') }}"></script>
 
 
 </body>
