@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('title', 'Add Client')
+@section('title', 'Edit Client')
 
 @section('content')
 
@@ -18,7 +18,9 @@
         </div>
         <div class="col-sm-8">
             <div class="title-action">
-                <a href="#" class="btn btn-primary">Import</a>
+                {{Form::open(['route'=>['client.destroy', $client->id], 'method'=>'delete'])}}
+                <button class="btn btn-danger">Delete</button>
+                {{Form::close()}}
             </div>
         </div>
     </div>
@@ -33,42 +35,42 @@
                         <h5>@yield('title')</h5>
                     </div>
                     <div class="ibox-content">
-                        {{Form::open(['route'=>'client.store'])}}
+                        {{Form::open(['route'=>['client.update',$client->id],'method'=>'put'])}}
 
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Last Name</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" name="lname">
+                                <input type="text" class="form-control" name="lname" value="{{$client->lname}}">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">First Name</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" name="fname">
+                                <input type="text" class="form-control" name="fname" value="{{$client->fname}}">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Middle Name</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" name="mname">
+                                <input type="text" class="form-control" name="mname" value="{{$client->mname}}">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Mobile No. 1</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" name="contact_number_1">
+                                <input type="text" class="form-control" name="contact_number_1" value="{{$client->contact_number_1}}">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Mobile No. 2 (optional)</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" name="contact_number_2">
+                                <input type="text" class="form-control" name="contact_number_2" value="{{$client->contact_number_2}}">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Email-Address</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" name="email">
+                                <input type="text" class="form-control" name="email" value="{{$client->email}}">
                             </div>
                         </div>
                         <div class="form-group row">
@@ -76,47 +78,47 @@
                             <div class="col-sm-10">
                                 <select name="marital_status" data-title="Civil Status" class="profile_info form-control required">
                                     <option value="" readonly></option>
-                                    <option value="Single">Single</option>
-                                    <option value="Married">Married</option>
-                                    <option value="Widow/er">Widower</option>
-                                    <option value="Separated">Separated</option>
+                                    <option value="Single" {{$client->marital_status == 'Single'?'selected':''}}>Single</option>
+                                    <option value="Married" {{$client->marital_status == 'Married'?'selected':''}}>Married</option>
+                                    <option value="Widow/er" {{$client->marital_status == 'Widow/er'?'selected':''}}>Widower</option>
+                                    <option value="Separated" {{$client->marital_status == 'Separated'?'selected':''}}>Separated</option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Date of Birth</label>
                             <div class="col-sm-10">
-                                <input name="dob" type="text" data-title="Date of Birth" class="profile_info dob-input form-control required" id="dob" autocomplete="">
+                                <input name="dob" value="{{$client->dob}}" type="text" data-title="Date of Birth" class="profile_info dob-input form-control required" id="dob" autocomplete="">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">House No./St/Phase/Subd</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" name="address">
+                                <input type="text" class="form-control" name="address" value="{{$client->address}}">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Barangay</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" name="barangay">
+                                <input type="text" class="form-control" name="barangay" value="{{$client->barangay}}">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">City</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" name="city" value="Daraga" readonly>
+                                <input type="text" class="form-control" name="city" value="{{$client->city}}" value="Daraga" readonly>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Province</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" name="province" value="Albay" readonly>
+                                <input type="text" class="form-control" name="province" value="{{$client->province}}" value="Albay" readonly>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Remarks</label>
                             <div class="col-sm-10">
-                                <textarea name="remarks" id="" cols="30" rows="10" class="form-control" style="resize: none"></textarea>
+                                <textarea name="remarks" id="" cols="30" rows="10" class="form-control" style="resize: none">{!! $client->remarks !!}</textarea>
                             </div>
                         </div>
                         <div class="row">

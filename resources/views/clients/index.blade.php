@@ -27,6 +27,7 @@
 
         <div class="row">
             <div class="col-sm-12">
+                @include('alerts.validation')
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
                         <h5>@yield('title')</h5>
@@ -58,7 +59,7 @@
                                     <td>{{ $data->mobile_numbers }}</td>
                                     <td class="text-right">
                                         <div class="btn-group text-right">
-                                            <a href="" class="action btn-white btn btn-xs"><i class="fa fa-search text-success"></i> Show</a>
+                                            <a href="{{route('client.show',$data->id)}}" class="action btn-white btn btn-xs"><i class="fa fa-search text-success"></i> Show</a>
                                         </div>
                                     </td>
                                 </tr>
