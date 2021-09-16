@@ -13,8 +13,16 @@ class ClientController extends Controller
         $clients = Clients::all();
         return view('clients.index', compact('clients'));
     }
+
     public function create()
     {
         return view('clients.create');
+    }
+
+    public function store(Request $request)
+    {
+        $client = Clients::create($request->except('_token'));
+
+        return redirect()->route('client.index');
     }
 }

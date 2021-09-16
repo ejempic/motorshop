@@ -49,7 +49,7 @@
 {{--                        <img alt="image" class="img-fluid" src="{{ asset('img/a1.jpg') }}"/>--}}
 
                         <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                            <span class="block m-t-xs font-bold">Keisser Admin</span>
+                            <span class="block m-t-xs font-bold">{{auth()->user()->name}}</span>
                             <span class="text-muted text-xs block"> Admin <b class="caret"></b></span>
                         </a>
                         <div style="position: relative">

@@ -18,7 +18,7 @@
         </div>
         <div class="col-sm-8">
             <div class="title-action">
-{{--                <a href="#" class="btn btn-primary">This is action area</a>--}}
+                <a href="#" class="btn btn-primary">Import</a>
             </div>
         </div>
     </div>
@@ -35,15 +35,87 @@
                         {{Form::open(['route'=>'client.store'])}}
 
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">First Name</label>
+                            <label class="col-sm-2 col-form-label">Last Name</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control">
+                                <input type="text" class="form-control" name="lname">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">First Name</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control">
+                                <input type="text" class="form-control" name="fname">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Middle Name</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="mname">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Mobile No. 1</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="contact_number_1">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Mobile No. 2 (optional)</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="contact_number_2">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Email-Address</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="email">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Marital Status</label>
+                            <div class="col-sm-10">
+                                <select name="marital_status" data-title="Civil Status" class="profile_info form-control required">
+                                    <option value="" readonly></option>
+                                    <option value="Single">Single</option>
+                                    <option value="Married">Married</option>
+                                    <option value="Widow/er">Widower</option>
+                                    <option value="Separated">Separated</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Date of Birth</label>
+                            <div class="col-sm-10">
+                                <input name="dob" type="text" data-title="Date of Birth" class="profile_info dob-input form-control required" id="dob" autocomplete="">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">House No./St/Phase/Subd</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="address">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Barangay</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="barangay">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">City</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="city" value="Daraga" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Province</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="province" value="Albay" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Remarks</label>
+                            <div class="col-sm-10">
+                                <textarea name="remarks" id="" cols="30" rows="10" class="form-control" style="resize: none"></textarea>
                             </div>
                         </div>
                         <div class="row">
@@ -144,6 +216,14 @@
             {{--var modal = $('#modal');--}}
 
 
+            $('.dob-input').datepicker({
+                startView: 2,
+                todayBtn: false,
+                keyboardNavigation: false,
+                forceParse: false,
+                autoclose: true,
+                format: "mm/dd/yyyy"
+            });
 
             var mem = $('.datepicker').datepicker({
                 todayBtn: "linked",
