@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('title', 'Add Client')
+@section('title', 'Edit Repo')
 
 @section('content')
 
@@ -18,7 +18,9 @@
         </div>
         <div class="col-sm-8">
             <div class="title-action">
-                <a href="#" class="btn btn-primary">Import</a>
+                {{Form::open(['route'=>['repo.destroy', $data->id], 'method'=>'delete'])}}
+                <button class="btn btn-danger">Delete</button>
+                {{Form::close()}}
             </div>
         </div>
     </div>
@@ -33,13 +35,94 @@
                         <h5>@yield('title')</h5>
                     </div>
                     <div class="ibox-content">
-                        @include('clients.partial.add-form')
+                        {{Form::open(['route'=>['repo.update',$data->id],'files'=>true,'method'=>'put'])}}
+
+                        <img src="{{$data->image_primary}}" alt="" id="image_preview" class="mb-4" style="height: 174px;">
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Photo</label>
+                            <div class="col-sm-10">
+                                <input accept="image/*" type="file" class="form-control" id="image" name="image" style="line-height: 18px;">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Model</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="model" value="{{$data->model}}">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Brand</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="brand" value="{{$data->brand}}">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Type</label>
+                            <div class="col-sm-10">
+                                <select name="type" class="form-control required">
+                                    <option value="" readonly></option>
+                                    <option {{$data->type=="Cruiser"?'selected':''}} value="Cruiser">Cruiser</option>
+                                    <option {{$data->type=="Off-road"?'selected':''}} value="Off-road">Off-road</option>
+                                    <option {{$data->type=="Scooters"?'selected':''}} value="Scooters">Scooters</option>
+                                    <option {{$data->type=="Sport"?'selected':''}} value="Sport">Sport</option>
+                                    <option {{$data->type=="Standard"?'selected':''}} value="Standard">Standard</option>
+                                    <option {{$data->type=="Touring"?'selected':''}} value="Touring">Touring</option>
+                                    <option {{$data->type=="Utility"?'selected':''}} value="Utility">Utility</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Engine No</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="engine_no" value="{{$data->engine_no}}">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Plate No</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="plate_no" value="{{$data->plate_no}}">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Chassis No</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="chassis_no" value="{{$data->chassis_no}}">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Color(s)</label>
+                            <div class="col col-xs-12">
+                                <input type="text" class="form-control" name="color[]" value="{{$data->color[0]}}">
+                            </div>
+                            <div class="col col-xs-12">
+                                <input type="text" class="form-control" name="color[]" value="{{optional($data->color)[1]}}">
+                            </div>
+                            <div class="col col-xs-12">
+                                <input type="text" class="form-control" name="color[]" value="{{optional($data->color)[2]}}">
+                            </div>
+                            <div class="col col-xs-12">
+                                <input type="text" class="form-control" name="color[]" value="{{optional($data->color)[3]}}">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Remarks</label>
+                            <div class="col-sm-10">
+                                <textarea name="remarks" id="" cols="30" rows="10" class="form-control" style="resize: none">{!! $data->remarks !!}</textarea>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <button class="btn btn-success" id="submit_application">Submit</button>
+                            </div>
+                        </div>
+                        {{Form::close()}}
                     </div>
                 </div>
             </div>
         </div>
 
     </div>
+
 
     <div class="modal inmodal fade" id="modal" data-type="" tabindex="-1" role="dialog" aria-hidden="true" data-category="" data-variant="" data-bal="">
         <div id="modal-size">
@@ -78,6 +161,18 @@
 {{--    {!! Html::script('/js/template/plugins/sweetalert/sweetalert.min.js') !!}--}}
 {{--    {!! Html::script('/js/template/moment.js') !!}--}}
     <script>
+        var imgInp = document.getElementById('image');
+        var imgPre = document.getElementById('image_preview');
+
+        imgInp.onchange = evt => {
+            const [file] = imgInp.files
+            if (file) {
+                imgPre.src = URL.createObjectURL(file)
+            }
+        }
+        function numberWithCommas(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
         function numberWithCommas(x) {
             return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         }

@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('title', 'Add Client')
+@section('title', 'Add Repo')
 
 @section('content')
 
@@ -33,7 +33,7 @@
                         <h5>@yield('title')</h5>
                     </div>
                     <div class="ibox-content">
-                        @include('clients.partial.add-form')
+                        @include('repo.partial.add-form')
                     </div>
                 </div>
             </div>
@@ -78,9 +78,6 @@
 {{--    {!! Html::script('/js/template/plugins/sweetalert/sweetalert.min.js') !!}--}}
 {{--    {!! Html::script('/js/template/moment.js') !!}--}}
     <script>
-        function numberWithCommas(x) {
-            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        }
         $(document).on('input', '#total_price,#down_payment,#total_less_downpayment',function(){
             var total_price = $('#total_price').val();
             total_price = parseFloat(total_price.replace(/,/g, ''))
@@ -145,31 +142,8 @@
                 placement: 'bottom'
             });
 
+            $('.select2').show()
             $('.money').mask("#,##0.00", {reverse: true});
-            // $(document).on('input', '', function(){
-            //     modal.modal({backdrop: 'static', keyboard: false});
-            //     modal.modal('toggle');
-            // });
-
-{{--             var table = $('#table').DataTable({--}}
-{{--                 processing: true,--}}
-{{--                 serverSide: true,--}}
-{{--                 ajax: {--}}
-{{--                     url: '{!! route('') !!}',--}}
-{{--                     data: function (d) {--}}
-{{--                         d.branch_id = '';--}}
-{{--                     }--}}
-{{--                 },--}}
-{{--                 columnDefs: [--}}
-{{--                     { className: "text-right", "targets": [ 0 ] }--}}
-{{--                 ],--}}
-{{--                 columns: [--}}
-{{--                     { data: 'name', name: 'name' },--}}
-{{--                     { data: 'action', name: 'action' }--}}
-{{--                 ]--}}
-{{--             });--}}
-
-            {{--table.ajax.reload();--}}
 
         });
     </script>

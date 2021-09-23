@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('title', 'Add Client')
+@section('title', 'Edit Client')
 
 @section('content')
 
@@ -18,7 +18,9 @@
         </div>
         <div class="col-sm-8">
             <div class="title-action">
-                <a href="#" class="btn btn-primary">Import</a>
+                {{Form::open(['route'=>['client.destroy', $client->id], 'method'=>'delete'])}}
+                <button class="btn btn-danger">Delete</button>
+                {{Form::close()}}
             </div>
         </div>
     </div>
@@ -33,7 +35,52 @@
                         <h5>@yield('title')</h5>
                     </div>
                     <div class="ibox-content">
-                        @include('clients.partial.add-form')
+                        {{Form::open(['route'=>['user.update',$user->id],'files'=>true,'method'=>'put'])}}
+
+                        <img src="{{$user->image_primary}}" alt="" id="image_preview" class="mb-4" style="height: 174px;">
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Photo</label>
+                            <div class="col-sm-10">
+                                <input accept="image/*" type="file" class="form-control" id="image" name="image" style="line-height: 18px;">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Name</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="name" value="{{$user->name}}">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Username</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="username" value="{{$user->username}}">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Password</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="password">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Job Title</label>
+                            <div class="col-sm-10">
+                                <select name="marital_status" data-title="Civil Status" class="profile_info form-control required">
+                                    <option value="" readonly></option>
+                                    <option value="admin">Admin</option>
+                                    <option value="manager">Manager</option>
+                                    <option value="encoder">Encoder</option>
+                                    <option value="clerk">Clerk</option>
+                                    <option value="collector">Collector</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <button class="btn btn-success" id="submit_application">Submit</button>
+                            </div>
+                        </div>
+                        {{Form::close()}}
                     </div>
                 </div>
             </div>
@@ -78,6 +125,18 @@
 {{--    {!! Html::script('/js/template/plugins/sweetalert/sweetalert.min.js') !!}--}}
 {{--    {!! Html::script('/js/template/moment.js') !!}--}}
     <script>
+        var imgInp = document.getElementById('image');
+        var imgPre = document.getElementById('image_preview');
+
+        imgInp.onchange = evt => {
+            const [file] = imgInp.files
+            if (file) {
+                imgPre.src = URL.createObjectURL(file)
+            }
+        }
+        function numberWithCommas(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
         function numberWithCommas(x) {
             return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         }

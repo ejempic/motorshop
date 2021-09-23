@@ -24,6 +24,7 @@ Route::middleware(['auth'])->group(function(){
 
     Route::resource('client', 'ClientController');
     Route::resource('unit', 'UnitController');
+    Route::resource('repo', 'RepoController');
     Route::resource('application', 'ApplicationController');
     Route::group(['prefix' => 'application/status/'],function(){
         Route::get('active', 'ApplicationController@active')->name('application-status-active');
@@ -31,5 +32,6 @@ Route::middleware(['auth'])->group(function(){
         Route::get('history', 'ApplicationController@history')->name('application-status-history');
     });
     Route::post('pay', 'PaymentController@store')->name('pay');
+    Route::resource('user', 'UserController');
 });
 

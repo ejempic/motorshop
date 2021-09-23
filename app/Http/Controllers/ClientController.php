@@ -10,7 +10,8 @@ class ClientController extends Controller
     //
     public function index()
     {
-        $clients = Clients::all();
+        $clients = Clients::orderBy('id','desc')
+            ->get();
         return view('clients.index', compact('clients'));
     }
 
@@ -23,6 +24,15 @@ class ClientController extends Controller
     {
         $client = Clients::create($request->except('_token'));
 
+        if($request->hasFile('image')){
+            $client->addMedia($request->file('image'))
+                ->toMediaCollection('primary');
+        }
+
+        if($request->ajax()){
+            return response()->json($client, 200);
+        }
+
         return redirect()->route('client.index')->with('success', 'Successfully Created Client!');
     }
 
@@ -31,6 +41,11 @@ class ClientController extends Controller
         $client = Clients::find($id);
         $client->update($request->except('_token'));
 
+        if($request->hasFile('image')){
+            $client->clearMediaCollection('primary');
+            $client->addMedia($request->file('image'))
+                ->toMediaCollection('primary');
+        }
         return redirect()->route('client.index')->with('success', 'Successfully Updated Client!');
     }
 
@@ -45,6 +60,7 @@ class ClientController extends Controller
     {
         $client = Clients::find($id);
         $client->delete();
+        $client->clearMediaCollection('primary');
         return redirect()->route('client.index')->with('success', 'Successfully Deleted Client!');
     }
 }

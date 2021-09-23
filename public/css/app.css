@@ -11355,7 +11355,7 @@ a.text-dark:focus {
 }
 
 select.form-control:not([size]):not([multiple]) {
-  height: 37px !important;
+  height: 34px !important;
 }
 
 .project-title a {
@@ -11363,4 +11363,3 @@ select.form-control:not([size]):not([multiple]) {
   color: #676a6c;
   font-weight: 600;
 }
-

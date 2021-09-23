@@ -2,8 +2,8 @@
 
 use Illuminate\Database\Seeder;
 use App\User;
-use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\DB;
+
 
 class InitUsersSeeder extends Seeder
 {
@@ -17,7 +17,7 @@ class InitUsersSeeder extends Seeder
         $roles = ['root', 'admin', 'manager', 'encoder', 'clerk', 'collector'];
 
         foreach($roles as $role){
-            $model = DB::table('roles')->insert(['name' => $role, 'display_name'=> ucfirst($role)]);
+            $model = DB::table('roles')->insert(['name' => $role, 'guard_name' => 'web']);
         }
         $users = [
             [

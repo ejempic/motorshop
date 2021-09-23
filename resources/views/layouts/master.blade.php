@@ -14,22 +14,17 @@
 {{--    <link rel="icon" type="image/png" sizes="16x16" href="{{ URL::to('/favicon_io/favicon-16x16.png') }}">--}}
 {{--    <link rel="manifest" href="{{ URL::to('/favicon_io/site.webmanifest') }}">--}}
 
-    <link rel="stylesheet" href="/css/app.css">
-    <link rel="stylesheet" href="/css/styles.css">
-    <link rel="stylesheet" href="/font-awesome/css/font-awesome.css">
-    <link rel="stylesheet" href="/css/template/animate.css">
-    <link rel="stylesheet" href="/css/template/style.css">
+    <link rel="stylesheet" href="/css/app.css?v={{now()}}">
+    <link rel="stylesheet" href="/font-awesome/css/font-awesome.css?v={{now()}}">
+    <link rel="stylesheet" href="/css/template/animate.css?v={{now()}}">
+    <link rel="stylesheet" href="/css/template/style.css?v={{now()}}">
 
 {{--    {!! Html::style('/css/app.css') !!}--}}
     {!! Html::style('/css/styles.css') !!}
     {!! Html::style('/font-awesome/css/font-awesome.css') !!}
     {!! Html::style('/css/template/animate.css') !!}
-
-
-
-
-
     @yield('styles')
+    <link rel="stylesheet" href="/css/styles.css?v={{now()}}">
 
 </head>
 
@@ -134,6 +129,7 @@
 {!! Html::script('/js/template/plugins/pace/pace.min.js') !!}
 
 @yield('scripts')
+@stack('short_scripts')
 
 {{--{!! Html::script('/js/template/jquery-3.1.1.min.js') !!}--}}
 <!-- Custom and plugin javascript -->

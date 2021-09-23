@@ -47,6 +47,7 @@
                                 <th>Client</th>
                                 <th>Unit</th>
                                 <th>TLC</th>
+                                <th>Data</th>
                                 <th class="text-right" data-sort-ignore="true"><i class="fa fa-cogs text-success"></i></th>
                             </tr>
                             </thead>
@@ -56,6 +57,7 @@
                                     <td>{{ $data->client->name }}</td>
                                     <td>{{ $data->unit->plate_no }}</td>
                                     <td>{{ currency_format($data->total_price) }}</td>
+                                    <td><pre>{{ json_encode($data,128) }}</pre></td>
                                     <td class="text-right">
                                         <div class="btn-group text-right">
                                             <button class="action btn-white btn btn-xs sched_modal_trigger" data-schedule="{{$data->schedules}}" data-app="{{$data}}"><i class="fa fa-calendar text-success"></i> Schedules</button>

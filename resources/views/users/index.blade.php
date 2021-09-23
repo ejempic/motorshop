@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('title', 'Units')
+@section('title', 'Users')
 
 @section('content')
 
@@ -18,7 +18,7 @@
         </div>
         <div class="col-sm-8">
             <div class="title-action">
-                <a href="{{route('unit.create')}}" class="btn btn-primary">New Unit</a>
+                <a href="{{route('client.create')}}" class="btn btn-primary">New Client</a>
             </div>
         </div>
     </div>
@@ -46,22 +46,22 @@
                             <thead>
                             <tr>
                                 <th>Image</th>
-                                <th>Model</th>
-                                <th>Brand</th>
-                                <th>Color</th>
+                                <th>Name</th>
+{{--                                <th>Address</th>--}}
+{{--                                <th>Contact No</th>--}}
                                 <th class="text-right" data-sort-ignore="true"><i class="fa fa-cogs text-success"></i></th>
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($units as $data)
+                            @foreach($users as $data)
                                 <tr>
                                     <td><img src="{{ $data->image_primary }}" alt="" class="img-thumbnail" style="height: 65px"></td>
-                                    <td>{{ $data->model }}</td>
-                                    <td>{{ $data->brand }}</td>
-                                    <td>{{ $data->color }}</td>
+                                    <td>{{ $data->name }}</td>
+{{--                                    <td>{{ $data->complete_address }}</td>--}}
+{{--                                    <td>{{ $data->mobile_numbers }}</td>--}}
                                     <td class="text-right">
                                         <div class="btn-group text-right">
-                                            <a href="{{route('unit.show',$data->id)}}" class="action btn-white btn btn-xs"><i class="fa fa-search text-success"></i> Show</a>
+                                            <a href="{{route('user.show',$data->id)}}" class="action btn-white btn btn-xs"><i class="fa fa-search text-success"></i> Show</a>
                                         </div>
                                     </td>
                                 </tr>

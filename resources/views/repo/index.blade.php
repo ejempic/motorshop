@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('title', 'Units')
+@section('title', 'Repossessed')
 
 @section('content')
 
@@ -18,7 +18,7 @@
         </div>
         <div class="col-sm-8">
             <div class="title-action">
-                <a href="{{route('unit.create')}}" class="btn btn-primary">New Unit</a>
+                <a href="{{route('repo.create')}}" class="btn btn-primary">New Repossessed</a>
             </div>
         </div>
     </div>
@@ -61,7 +61,7 @@
                                     <td>{{ $data->color }}</td>
                                     <td class="text-right">
                                         <div class="btn-group text-right">
-                                            <a href="{{route('unit.show',$data->id)}}" class="action btn-white btn btn-xs"><i class="fa fa-search text-success"></i> Show</a>
+                                            <a href="{{route('repo.show',$data->id)}}" class="action btn-white btn btn-xs"><i class="fa fa-search text-success"></i> Show</a>
                                         </div>
                                     </td>
                                 </tr>

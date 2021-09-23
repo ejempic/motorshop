@@ -7,6 +7,9 @@
 <li class="{{ (request()->is('unit')) ? 'active' : '' }}">
     <a href="{!! route('unit.index') !!}"><i class="fa fa-dropbox"></i> <span class="nav-label">Units</span></a>
 </li>
+<li class="{{ (request()->is('repo*')) ? 'active' : '' }}">
+    <a href="{!! route('repo.index') !!}"><i class="fa fa-recycle"></i> <span class="nav-label">Repossessed</span></a>
+</li>
 
 {{--<li class="{{ (request()->is('application')) ? 'active' : '' }}"><a href="{!! route('application.index') !!}"><i class="fa fa-list-alt"></i> <span class="nav-label">Applications</span></a></li>--}}
 
@@ -19,7 +22,10 @@
     </ul>
 </li>
 
-<li class="{{ (request()->is('application')) ? 'active' : '' }}"><a href="{!! route('application.index') !!}"><i class="fa fa-recycle"></i> <span class="nav-label">Repossessed</span></a></li>
+<li class="{{ (request()->is('users')) ? 'active' : '' }}">
+    <a href="{!! route('user.index') !!}"><i class="fa fa-users"></i> <span class="nav-label">Users</span></a>
+</li>
+
 <li class="{{ (request()->is('application')) ? 'active' : '' }}"><a href="{!! route('application.index') !!}"><i class="fa fa-list-alt"></i> <span class="nav-label">Collection List</span></a></li>
 <li class="{{ (request()->is('application')) ? 'active' : '' }}"><a href="{!! route('application.index') !!}"><i class="fa fa-car"></i> <span class="nav-label">Collectors</span></a></li>
 

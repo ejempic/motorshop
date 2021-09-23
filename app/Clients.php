@@ -3,9 +3,13 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\HasMedia\HasMedia;
+use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 
-class Clients extends Model
+class Clients extends Model implements HasMedia
 {
+    use HasMediaTrait;
+
     protected $fillable = [
         'lname',
         'fname',
@@ -21,6 +25,16 @@ class Clients extends Model
         'province',
         'remarks',
     ];
+
+    public function getImagePrimaryAttribute()
+    {
+        if($this->hasMedia('primary')){
+            return $this->getFirstMediaUrl('primary');
+        }else{
+            return url('img/blank-profile.jpg');
+
+        }
+    }
 
     public function getNameAttribute()
     {

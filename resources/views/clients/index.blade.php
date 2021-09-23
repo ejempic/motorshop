@@ -45,6 +45,7 @@
                         <table class="footable table table-stripped" data-page-size="8" data-filter=#filter>
                             <thead>
                             <tr>
+                                <th>Image</th>
                                 <th>Name</th>
                                 <th>Address</th>
                                 <th>Contact No</th>
@@ -54,6 +55,7 @@
                             <tbody>
                             @foreach($clients as $data)
                                 <tr>
+                                    <td><img src="{{ $data->image_primary }}" alt="" class="img-thumbnail" style="height: 65px"></td>
                                     <td>{{ $data->name }}</td>
                                     <td>{{ $data->complete_address }}</td>
                                     <td>{{ $data->mobile_numbers }}</td>

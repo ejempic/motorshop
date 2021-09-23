@@ -28,7 +28,7 @@
 {{--                            </div>--}}
                             <div class="form-group">
                                 <div class="btn-group btn-group-sm float-right">
-                                    <button type="button" class="btn btn-info verify_amount_fast_btn verify_amount_fast_semi" data-amount="">Semi-Monthly</button>
+                                    <button type="button" class="btn btn-info verify_amount_fast_btn verify_amount_fast_semi" data-amount="">Cut Off</button>
                                     <button type="button" class="btn btn-primary verify_amount_fast_btn verify_amount_fast_monthly" data-amount="">Monthly</button>
                                     <button type="button" class="btn btn-danger verify_amount_fast_btn verify_amount_fast_max" data-amount="">Max</button>
                                 </div>

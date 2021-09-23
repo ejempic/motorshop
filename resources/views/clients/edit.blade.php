@@ -35,8 +35,15 @@
                         <h5>@yield('title')</h5>
                     </div>
                     <div class="ibox-content">
-                        {{Form::open(['route'=>['client.update',$client->id],'method'=>'put'])}}
+                        {{Form::open(['route'=>['client.update',$client->id],'files'=>true,'method'=>'put'])}}
 
+                        <img src="{{$client->image_primary}}" alt="" id="image_preview" class="mb-4" style="height: 174px;">
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Photo</label>
+                            <div class="col-sm-10">
+                                <input accept="image/*" type="file" class="form-control" id="image" name="image" style="line-height: 18px;">
+                            </div>
+                        </div>
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Last Name</label>
                             <div class="col-sm-10">
@@ -171,6 +178,18 @@
 {{--    {!! Html::script('/js/template/plugins/sweetalert/sweetalert.min.js') !!}--}}
 {{--    {!! Html::script('/js/template/moment.js') !!}--}}
     <script>
+        var imgInp = document.getElementById('image');
+        var imgPre = document.getElementById('image_preview');
+
+        imgInp.onchange = evt => {
+            const [file] = imgInp.files
+            if (file) {
+                imgPre.src = URL.createObjectURL(file)
+            }
+        }
+        function numberWithCommas(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
         function numberWithCommas(x) {
             return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         }

@@ -15,9 +15,7 @@ class ApplicationController extends Controller
     //
     public function index()
     {
-        $this->checkForOverdues();
-        $applications = Application::all();
-        return view('applications.index', compact('applications'));
+        return redirect()->route('application-status-active');
     }
 
     public function active()
@@ -28,10 +26,7 @@ class ApplicationController extends Controller
                 ->where('status','unpaid');
         })
             ->get();
-//        return $applications;
-//
-//        dd($applications);
-        return view('applications.active', compact('applications'));
+        return view('applications.index', compact('applications'));
     }
 
     public function overdue()
@@ -57,8 +52,9 @@ class ApplicationController extends Controller
     public function create()
     {
         $clients = Clients::all();
-        $units = Units::all();
-        return view('applications.create', compact('clients', 'units'));
+        $units = Units::where('bnew_repo', 'bnew')->get();
+        $repo = Units::where('bnew_repo', 'repo')->get();
+        return view('applications.create', compact('clients', 'units', 'repo'));
     }
 
     public function store(Request $request)
@@ -67,7 +63,17 @@ class ApplicationController extends Controller
         $requestJson = $request->all();
         unset($requestJson['_token']);
         $requestJson['application_number'] =  sprintf('%08d', Application::count()+1);
-
+        $type = null;
+        if($request->has('unit_id')){
+            $type = 'unit';
+        }
+        if($request->has('repo_id')){
+            $type = 'repo';
+        }
+        if(!$type){
+            return redirect()->back()
+                ->with('danger', 'No Unit/Repo Selected!')->withInput($request->input());
+        }
         $requestJson['total_price'] = preg_replace('/,/','', $requestJson['total_price']);
         $requestJson['down_payment'] = preg_replace('/,/','', $requestJson['down_payment']);
         $requestJson['gross_monthly_rate'] = preg_replace('/,/','', $requestJson['gross_monthly_rate']);

@@ -2,14 +2,15 @@
 
 namespace App;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
+use Spatie\MediaLibrary\HasMedia\HasMedia;
+use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends \TCG\Voyager\Models\User
+class User extends Model implements HasMedia
 {
-    use Notifiable, HasRoles;
+    use Notifiable, HasRoles,HasMediaTrait;
 
     /**
      * The attributes that are mass assignable.
