@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\DB;
 
 class InitUsersSeeder extends Seeder
 {
+
+
     /**
      * Run the database seeds.
      *
