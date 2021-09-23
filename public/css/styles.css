@@ -25,3 +25,7 @@
 .select2-container--default .select2-search--dropdown .select2-search__field{
     border: 1px solid #e5e6e7;
 }
+body.mini-navbar .profile-element,
+body.mini-navbar .navbar-default .nav.collapse.in li a span {
+    display: block!important;
+}
