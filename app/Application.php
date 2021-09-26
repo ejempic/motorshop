@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 class Application extends Model
 {
     protected $fillable = [
+        'cash_installment',
         'client_id',
         'unit_id',
         'application_number',

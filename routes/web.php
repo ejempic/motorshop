@@ -26,6 +26,7 @@ Route::middleware(['auth'])->group(function(){
     Route::resource('unit', 'UnitController');
     Route::resource('repo', 'RepoController');
     Route::resource('application', 'ApplicationController');
+    Route::post('application_import', 'ApplicationController@import')->name('application.import');
     Route::group(['prefix' => 'application/status/'],function(){
         Route::get('active', 'ApplicationController@active')->name('application-status-active');
         Route::get('overdue', 'ApplicationController@overdue')->name('application-status-overdue');

@@ -4,11 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Application;
 use App\Clients;
+use App\Payments;
 use App\PaymentSchedule;
+use App\Repossessed;
 use App\Units;
+use Box\Spout\Reader\Common\Creator\ReaderEntityFactory;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ApplicationController extends Controller
 {
@@ -21,20 +26,20 @@ class ApplicationController extends Controller
     public function active()
     {
         $this->checkForOverdues();
-        $applications = Application::whereDoesntHave('schedules',function($q){
-            $q->where('due_date','<',Carbon::now())
-                ->where('status','unpaid');
+        $applications = Application::whereDoesntHave('schedules', function ($q) {
+            $q->where('due_date', '<', Carbon::now())
+                ->where('status', 'unpaid');
         })
             ->get();
-        return view('applications.index', compact('applications'));
+        return view('applications.active', compact('applications'));
     }
 
     public function overdue()
     {
         $this->checkForOverdues();
-        $applications = Application::whereHas('schedules',function($q){
-            $q->where('due_date','<',Carbon::now())
-                ->where('status','unpaid');
+        $applications = Application::whereHas('schedules', function ($q) {
+            $q->where('due_date', '<', Carbon::now())
+                ->where('status', 'unpaid');
         })
             ->get();
         return view('applications.overdue', compact('applications'));
@@ -43,7 +48,7 @@ class ApplicationController extends Controller
     public function checkForOverdues()
     {
         $overDues = PaymentSchedule::with('application')->whereDate('due_date', '<', now()->toDateString())->get();
-        foreach($overDues as $overDue){
+        foreach ($overDues as $overDue) {
             $overDue->payable_amount = $overDue->application->gross_monthly_rate;
             $overDue->save();
         }
@@ -57,29 +62,211 @@ class ApplicationController extends Controller
         return view('applications.create', compact('clients', 'units', 'repo'));
     }
 
+    public function import(Request $request)
+    {
+        $request->excel->storeAs('temp', 'file.xlsx');
+        $reader = ReaderEntityFactory::createXLSXReader()->setShouldFormatDates(true);
+        $reader->open(storage_path('app/temp/file.xlsx'));
+        $applications = [];
+        foreach ($reader->getSheetIterator() as $sheetKey => $sheet) {
+            $application = [];
+            $headers = [];
+            foreach ($sheet->getRowIterator() as $key => $row) {
+                $data = [];
+                $errorMessage = '';
+                if ($key == 1) {
+                    foreach ($row->getCells() as $keyCells => $value) {
+                        $headers[] = $value->getValue();
+                    }
+                    continue;
+                }
+                if (!isset($row->getCells()[1]) || $row->getCells()[1] == '') {
+                    continue;
+                }
+
+                foreach ($row->getCells() as $keyCells => $value) {
+                    if ($headers[$keyCells] != "") {
+                        $data[Str::slug($headers[$keyCells], '_')] = $value->getValue();
+                    }
+                }
+                $application_id = $row->getCells()[0]->getValue();
+                $application[$sheetKey][] = $data;
+                $applications[$application_id][Str::slug($sheet->getName(), '_')][] = $data;
+            }
+        }
+        $reader->close();
+
+        foreach ($applications as $key => $application) {
+
+            $application_id = null;
+            $applicationExist = 0;
+            $unit = null;
+            if (array_key_exists('application', $application)) {
+
+                $array = $application['application'][0];
+                if ($array['last_name'] && $array['first_name']) {
+                    $client = Clients::firstOrCreate(["lname" => $array["last_name"], "fname" => $array["first_name"], "mname" => $array["middle_name"], "contact_number_1" => $array["mobile_no"], "contact_number_2" => $array["mobile_no_2"], "email" => $array["email_address"], "marital_status" => $array["marital_status"], "dob" => Carbon::parse($array["dob"])->toDateString(), "address" => $array["address"], "barangay" => $array["barangay"], "city" => $array["municipality"], "province" => "Albay", "remarks" => $array["remarks"],]);
+                }
+                if ($array['model'] && $array['brand']) {
+                    $unit = Units::firstOrCreate(['model' => $array['model'], 'brand' => $array['brand'], 'engine_no' => $array['engine_no'], 'plate_no' => $array['plate_no'], 'chassis_no' => $array['chassis_no'] ?? $array['chasis_no'], 'color' => $array['colors'], 'bnew_repo' => $array['bnew_repo']]);
+                }
+
+//                $app_number = sprintf('%08d', Application::count() + 1);
+                if ($array['total_payment'] && $array['months']) {
+                    $app_number = $key;
+                    if (Application::firstOrNew(['application_number' => $key])->exists()) {
+                        $applicationExist = 1;
+                        $modelApplication = Application::firstOrNew(['application_number' => $key]);
+                    } else {
+                        $modelApplication = new Application();
+                    }
+                    $modelApplication->cash_installment = $array['cash_installment'];
+                    $modelApplication->client_id = $client->id;
+                    $modelApplication->unit_id = $unit->id;
+                    $modelApplication->application_number = $app_number;
+                    $modelApplication->total_price = $array['total_payment'];
+
+                    if ($array['cash_installment'] != 'cash') {
+                        $modelApplication->down_payment = $array['initial_payment'];
+                        $modelApplication->terms = $array['months'];
+                        $modelApplication->rebate = $array['rabate'];
+                        $modelApplication->start_date = Carbon::parse($array['first_due_date'])->toDateString();
+                        $totalLessInitialPayment = cleanNum($modelApplication->total_price) - cleanNum($modelApplication->down_payment);
+                        $amortization = $totalLessInitialPayment / cleanNum($modelApplication->terms);
+                        $modelApplication->amortization = $amortization;
+                        $modelApplication->first_payment_due = $amortization;
+                        $modelApplication->gross_monthly_rate = $amortization;
+                        $modelApplication->net_monthly_rate = $amortization - $modelApplication->rebate;
+                        $modelApplication->end_date = Carbon::parse($modelApplication->start_date)->addMonths($modelApplication->terms);
+                    }
+                    $modelApplication->save();
+
+                    if ($applicationExist) {
+                        PaymentSchedule::where('application_id', $modelApplication->id)->delete();
+                    }
+                    $date = Carbon::parse($modelApplication->start_date);
+                    foreach (range(1, $modelApplication->terms) as $index) {
+
+                        $date->addMonth();
+                        $paymentSchedules = new PaymentSchedule();
+                        $paymentSchedules->application_id = $modelApplication->id;
+                        $paymentSchedules->due_date = $date->toDateString();
+                        $paymentSchedules->payable_amount = $modelApplication['net_monthly_rate'];
+                        $paymentSchedules->status = 'unpaid';
+                        $paymentSchedules->paid_date = Carbon::parse()->toDateString();
+                        $paymentSchedules->save();
+                    }
+                    $application_id = $modelApplication->id;
+                }
+
+
+            }
+            if (array_key_exists('payment', $application) && $application_id) {
+
+                $payments = $application['payment'];
+                //"application_id",
+                //"due_date",
+                //"amount_paid",
+                //"series_no",
+                //"date_paid"
+                if ($applicationExist) {
+                    Payments::where('application_id', $application_id)->delete();
+                }
+                foreach ($payments as $payment) {
+                    DB::beginTransaction();
+
+                    $newPayments = new Payments();
+                    $newPayments->application_id = $application_id;
+                    if (isset($payment['amount_paid'])) {
+                        if (cleanNum($payment['amount_paid']) > 0) {
+                            $newPayments->paid_amount = cleanNum($payment['amount_paid']);
+                            if (isset($payment['series_no'])) {
+                                $newPayments->reference_number = $payment['series_no'];
+                            }
+                            $newPayments->save();
+                        }
+                    }
+
+                    $paidAmounts = $newPayments->paid_amount;
+                    $paymentAmounts = [];
+
+                    $loanScheduleFirst = PaymentSchedule::where('application_id', $application_id)
+                        ->where('status', 'unpaid')
+                        ->first();
+                    $loanAmor = $loanScheduleFirst->payable_amount;
+                    $loanRemainingLast = 0;
+                    if ($loanScheduleFirst->paid_amount > 0) {
+                        $loanRemainingLast = $loanScheduleFirst->payable_amount - $loanScheduleFirst->paid_amount;
+                    }
+                    do {
+                        if ($loanRemainingLast > 0) {
+                            if ($paidAmounts > $loanRemainingLast) {
+                                $paymentAmounts[] = $loanRemainingLast;
+                                $paidAmounts -= $loanRemainingLast;
+                            }
+                            $loanRemainingLast = 0;
+                        } else {
+                            if ($paidAmounts < $loanAmor) {
+                                $paymentAmounts[] = $paidAmounts;
+                            } else {
+                                $paymentAmounts[] = $loanAmor;
+                            }
+                            $paidAmounts -= $loanAmor;
+                        }
+                    } while ($paidAmounts > 0);
+
+                    foreach ($paymentAmounts as $paymentAmount) {
+                        $loanSchedule = PaymentSchedule::where('application_id', $application_id)
+                            ->whereRaw('paid_amount != payable_amount')
+                            ->first();
+                        $loanSchedule->paid_amount += $paymentAmount;
+                        $loanSchedule->save();
+
+                        if ($loanSchedule->paid_amount == $loanSchedule->payable_amount) {
+                            $loanSchedule->status = 'paid';
+                            $loanSchedule->save();
+                        }
+                    }
+
+                    DB::commit();
+                }
+            }
+            if (array_key_exists('repo_previous_owners', $application) && $application_id) {
+                $repo_owners = $application['repo_previous_owners'];
+                foreach ($repo_owners as $array) {
+                    if($array["last_name"]  && $unit){
+                        $client = Clients::firstOrCreate(["lname" => $array["last_name"], "fname" => $array["first_name"], "mname" => $array["middle_name"], "contact_number_1" => $array["mobile_no"], "contact_number_2" => $array["mobile_no_2"], "email" => $array["email_address"], "marital_status" => $array["marital_status"], "dob" => Carbon::parse($array["dob"])->toDateString(), "address" => $array["address"], "barangay" => $array["barangay"], "city" => $array["municipality"], "province" => "Albay", "remarks" => $array["remarks"],]);
+                        $repo = Repossessed::firstOrCreate(['unit_id' => $unit->id, 'client_id' => $client]);
+                    }
+                }
+            }
+        }
+        return redirect()->back()->with('successful', 'Successfully Imported!');
+    }
+
     public function store(Request $request)
     {
 
         $requestJson = $request->all();
         unset($requestJson['_token']);
-        $requestJson['application_number'] =  sprintf('%08d', Application::count()+1);
+        $requestJson['application_number'] = sprintf('%08d', Application::count() + 1);
         $type = null;
-        if($request->has('unit_id')){
+        if ($request->has('unit_id')) {
             $type = 'unit';
         }
-        if($request->has('repo_id')){
+        if ($request->has('repo_id')) {
             $type = 'repo';
         }
-        if(!$type){
+        if (!$type) {
             return redirect()->back()
                 ->with('danger', 'No Unit/Repo Selected!')->withInput($request->input());
         }
-        $requestJson['total_price'] = preg_replace('/,/','', $requestJson['total_price']);
-        $requestJson['down_payment'] = preg_replace('/,/','', $requestJson['down_payment']);
-        $requestJson['gross_monthly_rate'] = preg_replace('/,/','', $requestJson['gross_monthly_rate']);
-        $requestJson['rebate'] = preg_replace('/,/','', $requestJson['rebate']);
-        $requestJson['net_monthly_rate'] = preg_replace('/,/','', $requestJson['net_monthly_rate']);
-        $requestJson['first_payment_due'] = preg_replace('/,/','', $requestJson['first_payment_due']);
+        $requestJson['total_price'] = preg_replace('/,/', '', $requestJson['total_price']);
+        $requestJson['down_payment'] = preg_replace('/,/', '', $requestJson['down_payment']);
+        $requestJson['gross_monthly_rate'] = preg_replace('/,/', '', $requestJson['gross_monthly_rate']);
+        $requestJson['rebate'] = preg_replace('/,/', '', $requestJson['rebate']);
+        $requestJson['net_monthly_rate'] = preg_replace('/,/', '', $requestJson['net_monthly_rate']);
+        $requestJson['first_payment_due'] = preg_replace('/,/', '', $requestJson['first_payment_due']);
         $requestJson['terms'] = $requestJson['months'];
         $requestJson['amortization'] = $requestJson['net_monthly_rate'];
         $requestJson['start_date'] = $requestJson['first_due_date'];
@@ -87,7 +274,7 @@ class ApplicationController extends Controller
 //        DB::beginTransaction();
         $new_application = Application::create($requestJson);
         $date = Carbon::parse($new_application->start_date);
-        foreach(range(1, $new_application->terms) as $index){
+        foreach (range(1, $new_application->terms) as $index) {
 
             $date->addMonth();
             $paymentSchedules = new PaymentSchedule();

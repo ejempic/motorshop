@@ -16,7 +16,7 @@
 <li class="{{ (request()->is('application*')) ? 'active' : '' }}">
     <a href="#"><i class="fa fa-users"></i> <span class="nav-label">Application</span><span class="fa arrow"></span></a>
     <ul class="nav nav-second-level collapse">
-        <li class="{{ (request()->is('application/status/active')) ? 'active' : '' }}"><a href="{!! route('application-status-active') !!}">{{--<i class="d-none fa fa-list-alt"></i>--}} <span class="nav-label">Active</span></a></li>
+        <li class="{{ (request()->is('application/status/active')) ? 'active' : '' }}"><a href="{!! route('application-status-active') !!}">{{--<i class="d-none fa fa-list-alt"></i>--}} <span class="nav-label">Current</span></a></li>
         <li class="{{ (request()->is('application/status/overdue')) ? 'active' : '' }}"><a href="{!! route('application-status-overdue') !!}">{{--<i class="d-none fa fa-list-alt"></i>--}} <span class="nav-label">Overdue</span></a></li>
         <li class="{{ (request()->is('application/status/history')) ? 'active' : '' }}"><a href="{!! route('application-status-history') !!}">{{--<i class="d-none fa fa-list-alt"></i>--}} <span class="nav-label">History</span></a></li>
     </ul>

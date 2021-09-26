@@ -18,6 +18,7 @@
         </div>
         <div class="col-sm-8">
             <div class="title-action">
+                <a href="#" class="btn btn-success" data-toggle="modal" data-target="#import_application">Import</a>
                 <a href="{{ route('application.create') }}" class="btn btn-primary">New Application</a>
             </div>
         </div>
@@ -99,6 +100,7 @@
     @include('modals.payment_schedules')
     @include('modals.payment_verification')
     @include('modals.payment_history')
+    @include('modals.import')
 
     <div class="modal inmodal fade" id="modal" data-type="" tabindex="-1" role="dialog" aria-hidden="true" data-category="" data-variant="" data-bal="">
         <div id="modal-size">

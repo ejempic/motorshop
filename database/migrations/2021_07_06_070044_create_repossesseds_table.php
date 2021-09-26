@@ -15,6 +15,10 @@ class CreateRepossessedsTable extends Migration
     {
         Schema::create('repossesseds', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('unit_id');
+            $table->unsignedBigInteger('client_id');
+            $table->date('date_acquired')->nullable();
+            $table->date('date_returned')->nullable();
             $table->timestamps();
         });
     }

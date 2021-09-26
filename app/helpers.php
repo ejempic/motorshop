@@ -1,12 +1,12 @@
 <?php
 
 if (!function_exists('stringSlug')) {
-    function stringSlug($string)
+    function stringSlug($string, $separator = '-')
     {
         $string = strtolower($string); // Replaces all spaces with hyphens.
-        $string = str_replace(' ', '-', $string); // Replaces all spaces with hyphens.
+        $string = str_replace(' ', $separator, $string); // Replaces all spaces with hyphens.
         $string = preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
-        $string = preg_replace('/-+/', '-', $string); // Replaces multiple hyphens with single one.
+        $string = preg_replace('/-+/', $separator, $string); // Replaces multiple hyphens with single one.
         return $string;
     }
 }
@@ -103,6 +103,13 @@ if (!function_exists('currency_format')) {
     function currency_format($amount, $decimal = 2)
     {
         return number_format($amount, $decimal);
+    }
+}
+
+if (!function_exists('cleanNum')) {
+    function cleanNum($number)
+    {
+        return floatval(preg_replace('/,/',',', $number));
     }
 }
 
