@@ -20,21 +20,21 @@
         <input type="text" class="form-control" name="brand">
     </div>
 </div>
-<div class="form-group row">
-    <label class="col-sm-2 col-form-label">Type</label>
-    <div class="col-sm-10">
-        <select name="type" class="form-control required">
-            <option value="" readonly></option>
-            <option value="Cruiser">Cruiser</option>
-            <option value="Off-road">Off-road</option>
-            <option value="Scooters">Scooters</option>
-            <option value="Sport">Sport</option>
-            <option value="Standard">Standard</option>
-            <option value="Touring">Touring</option>
-            <option value="Utility">Utility</option>
-        </select>
-    </div>
-</div>
+{{--<div class="form-group row">--}}
+{{--    <label class="col-sm-2 col-form-label">Type</label>--}}
+{{--    <div class="col-sm-10">--}}
+{{--        <select name="type" class="form-control required">--}}
+{{--            <option value="" readonly></option>--}}
+{{--            <option value="Cruiser">Cruiser</option>--}}
+{{--            <option value="Off-road">Off-road</option>--}}
+{{--            <option value="Scooters">Scooters</option>--}}
+{{--            <option value="Sport">Sport</option>--}}
+{{--            <option value="Standard">Standard</option>--}}
+{{--            <option value="Touring">Touring</option>--}}
+{{--            <option value="Utility">Utility</option>--}}
+{{--        </select>--}}
+{{--    </div>--}}
+{{--</div>--}}
 <div class="form-group row">
     <label class="col-sm-2 col-form-label">Engine No</label>
     <div class="col-sm-10">

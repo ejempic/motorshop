@@ -75,9 +75,9 @@
     </div>
 </div>
 <div class="form-group row">
-    <label class="col-sm-2 col-form-label">City</label>
+    <label class="col-sm-2 col-form-label">City/Municipality</label>
     <div class="col-sm-10">
-        <input type="text" class="form-control" name="city" value="Daraga" readonly>
+        <input type="text" class="form-control" name="city">
     </div>
 </div>
 <div class="form-group row">

@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('title', 'Overdue Applications')
+@section('title', 'History')
 
 @section('content')
 
@@ -47,9 +47,10 @@
                             <thead>
                             <tr>
                                 <th>Client</th>
-                                <th>Engine Number</th>
                                 <th>Unit</th>
-                                <th>Balance</th>
+                                <th>Price</th>
+                                <th>Brand New/Repo</th>
+                                <th>Cash/Installment</th>
                                 <th class="text-right" data-sort-ignore="true"><i class="fa fa-cogs text-success"></i>
                                 </th>
                             </tr>
@@ -58,10 +59,10 @@
                             @foreach($applications as $data)
                                 <tr>
                                     <td>{{ $data->client->name }}</td>
-                                    <td>{{ $data->unit->engine_no }}</td>
-                                    <td>{{ $data->unit->plate_no }}</td>
-                                    <td>{{ currency_format($data->rem_bal) }}</td>
-                                    {{--                                    <td>{{ $data->rem_bal }}</td>--}}
+                                    <td>{{ $data->unit->engine_no .' - '. $data->unit->model }}</td>
+                                    <td>{{ currency_format($data->total_price) }}</td>
+                                    <td>{{ $data->unit->bnew_repo_display }}</td>
+                                    <td>{{ ucfirst($data->cash_installment) }}</td>
                                     <td class="text-right">
                                         <div class="btn-group text-right">
                                             <button class="action btn-white btn btn-xs sched_modal_trigger"
@@ -69,13 +70,13 @@
                                                         class="fa fa-calendar text-success"></i> Schedules
                                             </button>
                                         </div>
-                                        <a href="#" class="btn btn-primary btn-xs payment_modal_trigger"
-                                           data-amount_monthly="{{currency_format($data->amortization)}}"
-                                           data-amount_semimonthly="{{currency_format($data->amortization/2)}}"
-                                           data-amount_max="{{currency_format($data->total_price)}}"
-                                           data-id="{{$data->id}}"
-                                           data-status="{{$data->status}}"
-                                        ><i class="fa fa-money"></i> Pay </a>
+{{--                                        <a href="#" class="btn btn-primary btn-xs payment_modal_trigger"--}}
+{{--                                           data-amount_monthly="{{currency_format($data->amortization)}}"--}}
+{{--                                           data-amount_semimonthly="{{currency_format($data->amortization/2)}}"--}}
+{{--                                           data-amount_max="{{currency_format($data->total_price)}}"--}}
+{{--                                           data-id="{{$data->id}}"--}}
+{{--                                           data-status="{{$data->status}}"--}}
+{{--                                        ><i class="fa fa-money"></i> Pay </a>--}}
                                         <a href="#" class="btn btn-warning btn-xs payment_history_modal_trigger"
                                            data-payments="{{$data->payments}}"
                                            data-status="{{$data->status}}"
@@ -104,6 +105,7 @@
     @include('modals.payment_schedules')
     @include('modals.payment_verification')
     @include('modals.payment_history')
+    @include('modals.import')
 
     <div class="modal inmodal fade" id="modal" data-type="" tabindex="-1" role="dialog" aria-hidden="true"
          data-category="" data-variant="" data-bal="">
@@ -132,17 +134,11 @@
     {{--{!! Html::style('') !!}--}}
     {{--    <link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css">--}}
     {{--    {!! Html::style('/css/template/plugins/sweetalert/sweetalert.css') !!}--}}
-    <style>
-        #schedules_tbody tr.overdue {
-            background-color: #e3342f;
-            color: #fff;
-        }
-    </style>
 @endsection
 
 @section('scripts')
-    {!! Html::script('js/template/plugins/footable/footable.all.min.js') !!}
-    {{--    {!! Html::script('') !!}--}}
+    <script src=""></script>
+        {!! Html::script('js/template/plugins/footable/footable.all.min.js') !!}
     {{--    {!! Html::script(asset('vendor/datatables/buttons.server-side.js')) !!}--}}
     {{--    {!! $dataTable->scripts() !!}--}}
     {{--    {!! Html::script('/js/template/plugins/sweetalert/sweetalert.min.js') !!}--}}
@@ -211,16 +207,21 @@
             $('#schedules_tbody').empty();
             var data_schedules = $(this).data('schedule')
             var data_app = $(this).data('app')
-
             if (data_app) {
 
                 var rem_bal = data_app.rem_bal;
                 var total_paid = data_app.total_paid;
                 var total_payable = data_app.total_payable;
+                console.log(rem_bal)
+                console.log(total_paid)
+                console.log(total_payable)
 
-                $('#sched_rem_bal').html(numberWithCommas(rem_bal.toFixed(2)));
-                $('#sched_total_paid').html(numberWithCommas(total_paid.toFixed(2)));
-                $('#sched_total_payable').html(numberWithCommas(total_payable.toFixed(2)));
+                if (rem_bal && total_payable) {
+
+                    $('#sched_rem_bal').html(numberWithCommas(rem_bal.toFixed(2)));
+                    $('#sched_total_paid').html(numberWithCommas(total_paid.toFixed(2)));
+                    $('#sched_total_payable').html(numberWithCommas(total_payable.toFixed(2)));
+                }
 
 
                 for (let i = 0; i < data_schedules.length; i++) {

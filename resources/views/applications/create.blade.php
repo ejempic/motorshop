@@ -234,6 +234,12 @@
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="form-group">
+                                                    <label for="">Series No.</label>
+                                                    <input type="text" value="{{old('total_price')}}" name="reference_number" class="form-control" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
                                                     <label for="">Payment Date</label>
                                                     <input type="text" id="first_due_date"
                                                            value="{{old('first_due_date', now()->toDateString())}}"

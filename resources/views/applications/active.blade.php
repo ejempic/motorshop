@@ -37,7 +37,8 @@
                         <div class="row">
                             <div class="col-sm-4">
                                 <div class="form-group">
-                                    <input type="text" class="form-control input-sm m-b-xs" id="filter" placeholder="Search in table">
+                                    <input type="text" class="form-control input-sm m-b-xs" id="filter"
+                                           placeholder="Search in table">
                                 </div>
                             </div>
                         </div>
@@ -46,24 +47,28 @@
                             <thead>
                             <tr>
                                 <th>Client</th>
-                                <th>Engine Number</th>
                                 <th>Unit</th>
                                 <th>Balance</th>
-                                <th class="text-right" data-sort-ignore="true"><i class="fa fa-cogs text-success"></i></th>
+                                <th>Brand New/Repo</th>
+                                <th class="text-right" data-sort-ignore="true"><i class="fa fa-cogs text-success"></i>
+                                </th>
                             </tr>
                             </thead>
                             <tbody>
                             @foreach($applications as $data)
                                 <tr>
                                     <td>{{ $data->client->name }}</td>
-                                    <td>{{ $data->unit->engine_no }}</td>
-                                    <td>{{ $data->unit->plate_no }}</td>
-{{--                                    <td>{{ currency_format($data->rem_bal) }}</td>--}}
+                                    <td>{{ $data->unit->engine_no .' - '. $data->unit->model }}</td>
                                     <td>{{ currency_format($data['rem_bal']) }}</td>
-{{--                                    <td><pre>{{ json_encode($data, 128) }}</pre></td>--}}
+                                    <td>{{ $data->unit->bnew_repo_display }}</td>
+                                    {{--                                    <td>{{ currency_format($data->rem_bal) }}</td>--}}
+                                    {{--                                    <td><pre>{{ json_encode($data, 128) }}</pre></td>--}}
                                     <td class="text-right">
                                         <div class="btn-group text-right">
-                                            <button class="action btn-white btn btn-xs sched_modal_trigger" data-schedule="{{$data->schedules}}" data-app="{{$data}}"><i class="fa fa-calendar text-success"></i> Schedules</button>
+                                            <button class="action btn-white btn btn-xs sched_modal_trigger"
+                                                    data-schedule="{{$data->schedules}}" data-app="{{$data}}"><i
+                                                        class="fa fa-calendar text-success"></i> Schedules
+                                            </button>
                                         </div>
                                         <a href="#" class="btn btn-primary btn-xs payment_modal_trigger"
                                            data-amount_monthly="{{currency_format($data->amortization)}}"
@@ -102,11 +107,13 @@
     @include('modals.payment_history')
     @include('modals.import')
 
-    <div class="modal inmodal fade" id="modal" data-type="" tabindex="-1" role="dialog" aria-hidden="true" data-category="" data-variant="" data-bal="">
+    <div class="modal inmodal fade" id="modal" data-type="" tabindex="-1" role="dialog" aria-hidden="true"
+         data-category="" data-variant="" data-bal="">
         <div id="modal-size">
             <div class="modal-content">
                 <div class="modal-header" style="padding: 15px;">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <button type="button" class="close" data-dismiss="modal"><span
+                                aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                     <h4 class="modal-title"></h4>
                 </div>
                 <div class="modal-body">
@@ -126,16 +133,16 @@
 @section('styles')
     {{--{!! Html::style('') !!}--}}
     {{--    <link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css">--}}
-{{--    {!! Html::style('/css/template/plugins/sweetalert/sweetalert.css') !!}--}}
+    {{--    {!! Html::style('/css/template/plugins/sweetalert/sweetalert.css') !!}--}}
 @endsection
 
 @section('scripts')
-    <script src="js/template/plugins/footable/footable.all.min.js"></script>
-{{--    {!! Html::script('') !!}--}}
-{{--    {!! Html::script(asset('vendor/datatables/buttons.server-side.js')) !!}--}}
-{{--    {!! $dataTable->scripts() !!}--}}
-{{--    {!! Html::script('/js/template/plugins/sweetalert/sweetalert.min.js') !!}--}}
-{{--    {!! Html::script('/js/template/moment.js') !!}--}}
+    <script src=""></script>
+        {!! Html::script('js/template/plugins/footable/footable.all.min.js') !!}
+    {{--    {!! Html::script(asset('vendor/datatables/buttons.server-side.js')) !!}--}}
+    {{--    {!! $dataTable->scripts() !!}--}}
+    {{--    {!! Html::script('/js/template/plugins/sweetalert/sweetalert.min.js') !!}--}}
+    {{--    {!! Html::script('/js/template/moment.js') !!}--}}
     <script>
 
         function numberWithCommas(x) {
@@ -177,7 +184,7 @@
             var data_id = $(this).data('id');
             var data_status = $(this).data('status');
             $('#verify_payment_show').hide();
-            if(data_status == 'Active'){
+            if (data_status == 'Active') {
                 $('#verify_payment_show').show();
             }
             $('.verify_amount_fast_semi').attr('data-amount', data_semimonthly);
@@ -200,64 +207,59 @@
             $('#schedules_tbody').empty();
             var data_schedules = $(this).data('schedule')
             var data_app = $(this).data('app')
-            console.log(data_app)
+            if (data_app) {
 
-            for (let i = 0; i < data_schedules.length; i++) {
-                const dataSchedule = data_schedules[i];
+                var rem_bal = data_app.rem_bal;
+                var total_paid = data_app.total_paid;
+                var total_payable = data_app.total_payable;
+                console.log(rem_bal)
+                console.log(total_paid)
+                console.log(total_payable)
 
-                let setRows = '<tr>';
-                setRows += '<td>';
-                setRows += dataSchedule.due_date_display;
-                setRows += '</td>';
-                setRows += '<td class="text-right">';
-                setRows += numberWithCommas(dataSchedule.payable_amount);
-                setRows += '</td>';
-                // setRows += '<td class="text-right">';
-                // setRows += numberWithCommas(data_app.rebate);
-                // setRows += '</td>';
-                // setRows += '<td class="text-right">';
-                // setRows += numberWithCommas(data_app.gross_monthly_rate);
-                // setRows += '</td>';
-                setRows += '<td class="text-right">';
-                if(dataSchedule.paid_amount > 0){
-                    setRows += numberWithCommas(dataSchedule.paid_amount);
+                if (rem_bal && total_payable) {
+
+                    $('#sched_rem_bal').html(numberWithCommas(rem_bal.toFixed(2)));
+                    $('#sched_total_paid').html(numberWithCommas(total_paid.toFixed(2)));
+                    $('#sched_total_payable').html(numberWithCommas(total_payable.toFixed(2)));
                 }
-                setRows += '</td>';
-                setRows += '<td>';
-                setRows += dataSchedule.status_display;
-                setRows += '</td>';
-                setRows += '</tr>';
-                $('#schedules_tbody').append(setRows);
+
+
+                for (let i = 0; i < data_schedules.length; i++) {
+                    const dataSchedule = data_schedules[i];
+
+                    var tr_classes = dataSchedule.is_overdue ? 'overdue' : '';
+
+                    let setRows = '<tr class="' + tr_classes + '">';
+                    setRows += '<td>';
+                    setRows += dataSchedule.due_date_display;
+                    setRows += '</td>';
+                    setRows += '<td class="text-right">';
+                    setRows += numberWithCommas(dataSchedule.payable_amount);
+                    setRows += '</td>';
+                    // setRows += '<td class="text-right">';
+                    // setRows += numberWithCommas(data_app.rebate);
+                    // setRows += '</td>';
+                    // setRows += '<td class="text-right">';
+                    // setRows += numberWithCommas(data_app.gross_monthly_rate);
+                    // setRows += '</td>';
+                    setRows += '<td class="text-right">';
+                    if (dataSchedule.paid_amount > 0) {
+                        setRows += numberWithCommas(dataSchedule.paid_amount);
+                    }
+                    setRows += '</td>';
+                    setRows += '<td>';
+                    setRows += dataSchedule.status_display;
+                    setRows += '</td>';
+                    setRows += '</tr>';
+                    $('#schedules_tbody').append(setRows);
+                }
             }
+
         });
-        $(document).ready(function(){
+        $(document).ready(function () {
             {{--var modal = $('#modal');--}}
 
             $('.footable').footable();
-            // $(document).on('input', '', function(){
-            //     modal.modal({backdrop: 'static', keyboard: false});
-            //     modal.modal('toggle');
-            // });
-
-{{--             var table = $('#table').DataTable({--}}
-{{--                 processing: true,--}}
-{{--                 serverSide: true,--}}
-{{--                 ajax: {--}}
-{{--                     url: '{!! route('') !!}',--}}
-{{--                     data: function (d) {--}}
-{{--                         d.branch_id = '';--}}
-{{--                     }--}}
-{{--                 },--}}
-{{--                 columnDefs: [--}}
-{{--                     { className: "text-right", "targets": [ 0 ] }--}}
-{{--                 ],--}}
-{{--                 columns: [--}}
-{{--                     { data: 'name', name: 'name' },--}}
-{{--                     { data: 'action', name: 'action' }--}}
-{{--                 ]--}}
-{{--             });--}}
-
-            {{--table.ajax.reload();--}}
 
         });
     </script>

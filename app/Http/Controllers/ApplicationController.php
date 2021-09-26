@@ -29,9 +29,17 @@ class ApplicationController extends Controller
         $applications = Application::whereDoesntHave('schedules', function ($q) {
             $q->where('due_date', '<', Carbon::now())
                 ->where('status', 'unpaid');
-        })
+        })->where('status', 0)
             ->get();
         return view('applications.active', compact('applications'));
+    }
+
+    public function history()
+    {
+        $this->checkForOverdues();
+        $applications = Application::where('status', 1)
+            ->get();
+        return view('applications.history', compact('applications'));
     }
 
     public function overdue()
@@ -273,17 +281,27 @@ class ApplicationController extends Controller
         $requestJson['end_date'] = Carbon::parse($requestJson['first_due_date'])->addMonth($requestJson['terms'])->toDateString();
 //        DB::beginTransaction();
         $new_application = Application::create($requestJson);
-        $date = Carbon::parse($new_application->start_date);
-        foreach (range(1, $new_application->terms) as $index) {
+        if($request->cash_installment == 'cash'){
+            $payments = new Payments();
+            $payments->application_id = $new_application->id;
+            $payments->paid_amount = cleanNum($requestJson['total_price']);
+            $payments->reference_number = $requestJson['reference_number'];
+            $payments->save();
+            $new_application->status=1;
+            $new_application->save();
+        }else{
+            $date = Carbon::parse($new_application->start_date);
+            foreach (range(1, $new_application->terms) as $index) {
 
-            $date->addMonth();
-            $paymentSchedules = new PaymentSchedule();
-            $paymentSchedules->application_id = $new_application->id;
-            $paymentSchedules->due_date = $date->toDateString();
-            $paymentSchedules->payable_amount = $new_application['net_monthly_rate'];
-            $paymentSchedules->status = 'unpaid';
-            $paymentSchedules->paid_date = Carbon::parse()->toDateString();
-            $paymentSchedules->save();
+                $date->addMonth();
+                $paymentSchedules = new PaymentSchedule();
+                $paymentSchedules->application_id = $new_application->id;
+                $paymentSchedules->due_date = $date->toDateString();
+                $paymentSchedules->payable_amount = $new_application['net_monthly_rate'];
+                $paymentSchedules->status = 'unpaid';
+                $paymentSchedules->paid_date = Carbon::parse()->toDateString();
+                $paymentSchedules->save();
+            }
         }
 
         return redirect()->route('application.index');

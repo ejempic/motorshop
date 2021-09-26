@@ -32,4 +32,11 @@ class Units extends Model implements HasMedia
 
         }
     }
+    public function getBnewRepoDisplayAttribute()
+    {
+        if($this->bnew_repo == 'bnew'){
+            return 'Brand New';
+        }
+        return "Repossessed";
+    }
 }

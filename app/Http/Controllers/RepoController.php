@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Clients;
 use App\Units;
 use Illuminate\Http\Request;
 
@@ -15,7 +16,8 @@ class RepoController extends Controller
     }
     public function create()
     {
-        return view('repo.create');
+        $clients = Clients::all();
+        return view('repo.create', compact('clients'));
     }
 
     public function store(Request $request)
@@ -24,6 +26,8 @@ class RepoController extends Controller
         $array['bnew_repo'] = 'repo';
         $array['color'] = array_filter($array['color'], function($color){return $color;});
         $array['color'] = implode(',', $array['color']);
+
+        return $array;
         $modal = Units::create($array);
 
         if($request->hasFile('image')){

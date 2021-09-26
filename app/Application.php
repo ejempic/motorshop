@@ -22,6 +22,7 @@ class Application extends Model
         'net_monthly_rate',
         'start_date',
         'end_date',
+        'status',
     ];
 
     public function client()

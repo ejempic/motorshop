@@ -56,21 +56,21 @@
                                 <input type="text" class="form-control" name="brand" value="{{$data->brand}}">
                             </div>
                         </div>
-                        <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Type</label>
-                            <div class="col-sm-10">
-                                <select name="type" class="form-control required">
-                                    <option value="" readonly></option>
-                                    <option {{$data->type=="Cruiser"?'selected':''}} value="Cruiser">Cruiser</option>
-                                    <option {{$data->type=="Off-road"?'selected':''}} value="Off-road">Off-road</option>
-                                    <option {{$data->type=="Scooters"?'selected':''}} value="Scooters">Scooters</option>
-                                    <option {{$data->type=="Sport"?'selected':''}} value="Sport">Sport</option>
-                                    <option {{$data->type=="Standard"?'selected':''}} value="Standard">Standard</option>
-                                    <option {{$data->type=="Touring"?'selected':''}} value="Touring">Touring</option>
-                                    <option {{$data->type=="Utility"?'selected':''}} value="Utility">Utility</option>
-                                </select>
-                            </div>
-                        </div>
+{{--                        <div class="form-group row">--}}
+{{--                            <label class="col-sm-2 col-form-label">Type</label>--}}
+{{--                            <div class="col-sm-10">--}}
+{{--                                <select name="type" class="form-control required">--}}
+{{--                                    <option value="" readonly></option>--}}
+{{--                                    <option {{$data->type=="Cruiser"?'selected':''}} value="Cruiser">Cruiser</option>--}}
+{{--                                    <option {{$data->type=="Off-road"?'selected':''}} value="Off-road">Off-road</option>--}}
+{{--                                    <option {{$data->type=="Scooters"?'selected':''}} value="Scooters">Scooters</option>--}}
+{{--                                    <option {{$data->type=="Sport"?'selected':''}} value="Sport">Sport</option>--}}
+{{--                                    <option {{$data->type=="Standard"?'selected':''}} value="Standard">Standard</option>--}}
+{{--                                    <option {{$data->type=="Touring"?'selected':''}} value="Touring">Touring</option>--}}
+{{--                                    <option {{$data->type=="Utility"?'selected':''}} value="Utility">Utility</option>--}}
+{{--                                </select>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Engine No</label>
                             <div class="col-sm-10">
