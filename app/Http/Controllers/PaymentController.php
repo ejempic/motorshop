@@ -30,6 +30,7 @@ class PaymentController extends Controller
         $payments->application_id = $requestJson['application_id'];
         $payments->paid_amount = preg_replace('/,/', '', $requestJson['paid_amount']);
         $payments->reference_number = $requestJson['reference_number'];
+        $payments->payment_date = now()->toDateString();
         $payments->save();
 
         $paidAmounts = $payments->paid_amount;

@@ -191,6 +191,9 @@ class ApplicationController extends Controller
                             if (isset($payment['series_no'])) {
                                 $newPayments->reference_number = $payment['series_no'];
                             }
+                            if (isset($payment['date_paid'])) {
+                                $newPayments->payment_date = Carbon::parse($payment['date_paid'])->toDateString();
+                            }
                             $newPayments->save();
                         }
                     }

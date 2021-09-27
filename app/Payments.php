@@ -11,7 +11,7 @@ class Payments extends Model
     public function toArray()
     {
         $array = parent::toArray();
-        $array['paid_date_formatted'] = Carbon::parse($this->due_date)->toFormattedDateString();
+        $array['paid_date_formatted'] = Carbon::parse($this->payment_date)->toFormattedDateString();
         return $array;
     }
 }
