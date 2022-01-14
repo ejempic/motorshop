@@ -26,9 +26,12 @@ class RepoController extends Controller
         $array['bnew_repo'] = 'repo';
         $array['color'] = array_filter($array['color'], function($color){return $color;});
         $array['color'] = implode(',', $array['color']);
-
-        return $array;
+//        unset()$array[''];
         $modal = Units::create($array);
+
+
+        $reppoUsers = array_unique($array['repo_user']);
+
 
         if($request->hasFile('image')){
             $modal->addMedia($request->file('image'))

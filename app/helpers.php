@@ -102,6 +102,7 @@ if (!function_exists('computeTotalLoan')) {
 if (!function_exists('currency_format')) {
     function currency_format($amount, $decimal = 2)
     {
+        $amount = floatval($amount);
         return number_format($amount, $decimal);
     }
 }

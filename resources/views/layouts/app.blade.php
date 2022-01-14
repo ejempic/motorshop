@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="/font-awesome/css/font-awesome.css?v={{now()}}">
     <link rel="stylesheet" href="/css/template/animate.css?v={{now()}}">
     <link rel="stylesheet" href="/css/template/style.css?v={{now()}}">
+
 </head>
 <body class="gray-bg">
         @yield('content')

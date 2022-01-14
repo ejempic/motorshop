@@ -134,11 +134,12 @@
     {{--{!! Html::style('') !!}--}}
     {{--    <link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css">--}}
     {{--    {!! Html::style('/css/template/plugins/sweetalert/sweetalert.css') !!}--}}
+    {!! Html::style('/css/template/plugins/datapicker/datepicker3.css') !!}
 @endsection
 
 @section('scripts')
-    <script src=""></script>
-        {!! Html::script('js/template/plugins/footable/footable.all.min.js') !!}
+    {!! Html::script('js/template/plugins/footable/footable.all.min.js') !!}
+    {!! Html::script('/js/template/plugins/datapicker/bootstrap-datepicker.js') !!}
     {{--    {!! Html::script(asset('vendor/datatables/buttons.server-side.js')) !!}--}}
     {{--    {!! $dataTable->scripts() !!}--}}
     {{--    {!! Html::script('/js/template/plugins/sweetalert/sweetalert.min.js') !!}--}}
@@ -162,14 +163,14 @@
                 const dataPayment = data_payments[i];
                 console.log(dataPayment)
                 let setRows = '<tr>';
-                setRows += '<td>';
-                setRows += dataPayment.paid_date_formatted;
-                setRows += '</td>';
                 setRows += '<td class="text-right">';
                 setRows += numberWithCommas(dataPayment.paid_amount);
                 setRows += '</td>';
                 setRows += '<td>';
                 setRows += dataPayment.reference_number;
+                setRows += '</td>';
+                setRows += '<td>';
+                setRows += dataPayment.paid_date_formatted;
                 setRows += '</td>';
                 setRows += '</tr>';
                 $('#payment_history_tbody').append(setRows);
@@ -250,6 +251,9 @@
                     setRows += '<td>';
                     setRows += dataSchedule.status_display;
                     setRows += '</td>';
+                    setRows += '<td>';
+                    setRows += dataSchedule.paid_date_display;
+                    setRows += '</td>';
                     setRows += '</tr>';
                     $('#schedules_tbody').append(setRows);
                 }
@@ -261,6 +265,15 @@
 
             $('.footable').footable();
 
+            var mem = $('.datepicker').datepicker({
+                todayBtn: "linked",
+                keyboardNavigation: false,
+                forceParse: false,
+                calendarWeeks: true,
+                autoclose: true,
+                format: 'yyyy-mm-dd',
+                placement: 'bottom'
+            });
         });
     </script>
 @endsection

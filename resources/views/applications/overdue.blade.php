@@ -47,9 +47,15 @@
                             <thead>
                             <tr>
                                 <th>Client</th>
-                                <th>Engine Number</th>
                                 <th>Unit</th>
+                                <th>Price</th>
+                                @if($status != 'completed')
                                 <th>Balance</th>
+                                @endif
+                                <th>Brand New/Repo</th>
+                                @if($status == 'completed')
+                                    <th>Cash/Installment</th>
+                                @endif
                                 <th class="text-right" data-sort-ignore="true"><i class="fa fa-cogs text-success"></i>
                                 </th>
                             </tr>
@@ -58,9 +64,15 @@
                             @foreach($applications as $data)
                                 <tr>
                                     <td>{{ $data->client->name }}</td>
-                                    <td>{{ $data->unit->engine_no }}</td>
-                                    <td>{{ $data->unit->plate_no }}</td>
-                                    <td>{{ currency_format($data->rem_bal) }}</td>
+                                    <td>{{ $data->unit->engine_no .' - '. $data->unit->model }}</td>
+                                    <td>{{ currency_format($data->total_price) }}</td>
+                                    @if($status != 'completed')
+                                        <td>{{ currency_format($data->rem_bal) }}</td>
+                                    @endif
+                                    <td>{{ $data->unit->bnew_repo_display }}</td>
+                                    @if($status == 'completed')
+                                        <td>{{ ucfirst($data->cash_installment) }}</td>
+                                    @endif
                                     {{--                                    <td>{{ $data->rem_bal }}</td>--}}
                                     <td class="text-right">
                                         <div class="btn-group text-right">
@@ -69,6 +81,8 @@
                                                         class="fa fa-calendar text-success"></i> Schedules
                                             </button>
                                         </div>
+
+                                        @if($status == 'completed')
                                         <a href="#" class="btn btn-primary btn-xs payment_modal_trigger"
                                            data-amount_monthly="{{currency_format($data->amortization)}}"
                                            data-amount_semimonthly="{{currency_format($data->amortization/2)}}"
@@ -76,6 +90,7 @@
                                            data-id="{{$data->id}}"
                                            data-status="{{$data->status}}"
                                         ><i class="fa fa-money"></i> Pay </a>
+                                        @endif
                                         <a href="#" class="btn btn-warning btn-xs payment_history_modal_trigger"
                                            data-payments="{{$data->payments}}"
                                            data-status="{{$data->status}}"
@@ -104,6 +119,7 @@
     @include('modals.payment_schedules')
     @include('modals.payment_verification')
     @include('modals.payment_history')
+    @include('modals.import')
 
     <div class="modal inmodal fade" id="modal" data-type="" tabindex="-1" role="dialog" aria-hidden="true"
          data-category="" data-variant="" data-bal="">
@@ -132,6 +148,7 @@
     {{--{!! Html::style('') !!}--}}
     {{--    <link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css">--}}
     {{--    {!! Html::style('/css/template/plugins/sweetalert/sweetalert.css') !!}--}}
+    {!! Html::style('/css/template/plugins/datapicker/datepicker3.css') !!}
     <style>
         #schedules_tbody tr.overdue {
             background-color: #e3342f;
@@ -142,6 +159,7 @@
 
 @section('scripts')
     {!! Html::script('js/template/plugins/footable/footable.all.min.js') !!}
+    {!! Html::script('/js/template/plugins/datapicker/bootstrap-datepicker.js') !!}
     {{--    {!! Html::script('') !!}--}}
     {{--    {!! Html::script(asset('vendor/datatables/buttons.server-side.js')) !!}--}}
     {{--    {!! $dataTable->scripts() !!}--}}
@@ -166,14 +184,14 @@
                 const dataPayment = data_payments[i];
                 console.log(dataPayment)
                 let setRows = '<tr>';
-                setRows += '<td>';
-                setRows += dataPayment.paid_date_formatted;
-                setRows += '</td>';
                 setRows += '<td class="text-right">';
                 setRows += numberWithCommas(dataPayment.paid_amount);
                 setRows += '</td>';
                 setRows += '<td>';
                 setRows += dataPayment.reference_number;
+                setRows += '</td>';
+                setRows += '<td>';
+                setRows += dataPayment.paid_date_formatted;
                 setRows += '</td>';
                 setRows += '</tr>';
                 $('#payment_history_tbody').append(setRows);
@@ -199,7 +217,6 @@
         $(document).on('click', '#verify_payment_show', function () {
             $('#verify_payment').show();
             $(this).hide();
-
         });
         $(document).on('click', '.verify_amount_fast_btn', function () {
             var data_amount = $(this).data('amount');
@@ -225,6 +242,7 @@
 
                 for (let i = 0; i < data_schedules.length; i++) {
                     const dataSchedule = data_schedules[i];
+                    console.log(dataSchedule)
 
                     var tr_classes = dataSchedule.is_overdue ? 'overdue' : '';
 
@@ -249,6 +267,9 @@
                     setRows += '<td>';
                     setRows += dataSchedule.status_display;
                     setRows += '</td>';
+                    setRows += '<td>';
+                    setRows += dataSchedule.paid_date_display;
+                    setRows += '</td>';
                     setRows += '</tr>';
                     $('#schedules_tbody').append(setRows);
                 }
@@ -260,6 +281,16 @@
 
             $('.footable').footable();
 
+
+            var mem = $('.datepicker').datepicker({
+                todayBtn: "linked",
+                keyboardNavigation: false,
+                forceParse: false,
+                calendarWeeks: true,
+                autoclose: true,
+                format: 'yyyy-mm-dd',
+                placement: 'bottom'
+            });
         });
     </script>
 @endsection

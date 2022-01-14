@@ -12,9 +12,9 @@
                 <table class="table table-bordered">
                     <thead>
                     <tr>
-                        <th>Payment Date</th>
                         <th class="text-right">Amount</th>
-                        <th>Reference Number</th>
+                        <th>Receipt/Series No.</th>
+                        <th>Payment Date</th>
                     </tr>
                     </thead>
                     <tbody id="payment_history_tbody"></tbody>

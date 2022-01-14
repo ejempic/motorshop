@@ -25,7 +25,8 @@
     {!! Html::style('/css/template/animate.css') !!}
     @yield('styles')
     <link rel="stylesheet" href="/css/styles.css?v={{now()}}">
-
+    @PWA
+{{--    {{ pwa_meta() }}--}}
 </head>
 
 <body class="pace-done">

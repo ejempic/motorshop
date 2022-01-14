@@ -51,6 +51,7 @@
                         {{--                        <th class="text-right">Overdue Amount</th>--}}
                         <th class="text-right">Paid Amount</th>
                         <th>Status</th>
+                        <th>Paid Date</th>
                     </tr>
                     </thead>
                     <tbody id="schedules_tbody">

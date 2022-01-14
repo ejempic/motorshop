@@ -48,7 +48,19 @@ class Application extends Model
     public function getRemBalAttribute()
     {
         $query = $this->schedules()->select(DB::raw('sum(payable_amount) - sum(paid_amount) as rem_bal'))->first();
-        return optional($query)->rem_bal;
+        return currency_format(optional($query)->rem_bal);
+    }
+
+    public function getTotalPaidAttribute()
+    {
+        $total_paid_query = $this->schedules()->sum('paid_amount');
+        return currency_format($total_paid_query);
+    }
+
+    public function getTotalPayableAttribute()
+    {
+        $total_payable_query = $this->schedules()->sum('payable_amount');
+        return currency_format($total_payable_query);
     }
 
     public function toArray()

@@ -47,8 +47,10 @@
                             <tr>
                                 <th>Image</th>
                                 <th>Model</th>
+                                <th>Engine No</th>
                                 <th>Brand</th>
                                 <th>Color</th>
+                                <th>Plate No</th>
                                 <th class="text-right" data-sort-ignore="true"><i class="fa fa-cogs text-success"></i></th>
                             </tr>
                             </thead>
@@ -57,8 +59,10 @@
                                 <tr>
                                     <td><img src="{{ $data->image_primary }}" alt="" class="img-thumbnail" style="height: 65px"></td>
                                     <td>{{ $data->model }}</td>
+                                    <td>{{ $data->engine_no }}</td>
                                     <td>{{ $data->brand }}</td>
                                     <td>{{ $data->color }}</td>
+                                    <td>{{ $data->plate_no }}</td>
                                     <td class="text-right">
                                         <div class="btn-group text-right">
                                             <a href="{{route('unit.show',$data->id)}}" class="action btn-white btn btn-xs"><i class="fa fa-search text-success"></i> Show</a>

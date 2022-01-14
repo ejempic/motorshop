@@ -64,17 +64,26 @@ class PaymentController extends Controller
         foreach ($paymentAmounts as $paymentAmount) {
             $loanSchedule = PaymentSchedule::where('application_id', $request->application_id)
                 ->whereRaw('paid_amount != payable_amount')
+                ->where('status','unpaid')
                 ->first();
             $loanSchedule->paid_amount += $paymentAmount;
             $loanSchedule->save();
 
             if ($loanSchedule->paid_amount == $loanSchedule->payable_amount) {
                 $loanSchedule->status = 'paid';
+                $loanSchedule->paid_date = Carbon::parse()->toDateString();
                 $loanSchedule->save();
             }
         }
 
         DB::commit();
+        if($requestJson['_redirect'] == 'back'){
+            return redirect()->back();
+        }
+        if($requestJson['_redirect']){
+            return redirect()->url($requestJson['_redirect']);
+        }
         return redirect()->back();
+
     }
 }

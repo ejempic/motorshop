@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Clients;
+use App\Units;
 use Illuminate\Http\Request;
 
 class ClientController extends Controller
@@ -50,6 +51,16 @@ class ClientController extends Controller
     }
 
     public function show($id)
+    {
+        $client = Clients::find($id);
+        $clients = Clients::all();
+        $units = Units::where('bnew_repo', 'bnew')->get();
+        $repo = Units::where('bnew_repo', 'repo')->get();
+
+        return view('clients.show', compact('client','clients', 'units', 'repo'));
+    }
+
+    public function edit($id)
     {
         $client = Clients::find($id);
 

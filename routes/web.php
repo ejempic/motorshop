@@ -36,3 +36,5 @@ Route::middleware(['auth'])->group(function(){
     Route::resource('user', 'UserController');
 });
 
+
+\PWA::routes();

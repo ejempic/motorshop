@@ -26,6 +26,24 @@ class Clients extends Model implements HasMedia
         'remarks',
     ];
 
+    public function applications()
+    {
+        return $this->hasMany(Application::class, 'client_id')->orderBy('created_at','desc');
+    }
+
+    public function applicationsSortStatus()
+    {
+        return $this->hasMany(Application::class, 'client_id')
+            ->orderBy('created_at','asc')
+            ->orderBy('status','desc')
+            ;
+    }
+
+    public function application()
+    {
+        return $this->hasOne(Application::class, 'client_id')->orderBy('created_at','desc');
+    }
+
     public function getImagePrimaryAttribute()
     {
         if($this->hasMedia('primary')){
