@@ -26,6 +26,15 @@ Route::post('/units', function (Request $request) {
         'status' => 'success'
     ]);
 });
+Route::delete('/units/{id}', function (Request $request, $id) {
+
+    $unit = \App\Units::find($id);
+    $unit->delete();
+    return response()->json([
+        'status' => 'mauragun ka man!'
+    ]);
+});
+
 Route::get('/units', function (Request $request) {
 
     $unitQuery = \App\Units::query();
