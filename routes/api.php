@@ -75,7 +75,7 @@ Route::get('/units', function (Request $request) {
     if($request->has('bnew_repo') && $query = $request->input('bnew_repo')){
         $unitQuery->where('bnew_repo', 'like', '%'.$query.'%');
     }
-    $units = $unitQuery->get();
+    $units = $unitQuery->orderBy('id','desc')->get();
 
     return response()->json([
         'data'=> $units,
