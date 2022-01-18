@@ -33,7 +33,7 @@ Route::put('/units/{id}', function (Request $request, $id) {
 
     return response()->json([
         'data'=> $unit,
-        'status' => 'success'
+        'status' => 'imba naka update na!'
     ]);
 });
 Route::delete('/units/{id}', function (Request $request, $id) {
@@ -44,6 +44,17 @@ Route::delete('/units/{id}', function (Request $request, $id) {
     return response()->json([
         'status' => 'mauragun ka man!'
     ]);
+});
+
+Route::get('/units/{id}', function (Request $request, $id) {
+
+    $unit = \App\Units::find($id);
+
+    return response()->json([
+        'data' => $unit,
+        'status' => 'ini na oh!'
+    ]);
+
 });
 
 Route::get('/units', function (Request $request) {
