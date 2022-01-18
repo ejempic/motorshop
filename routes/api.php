@@ -17,6 +17,15 @@ use Illuminate\Support\Facades\Route;
 Route::get('/test', function (Request $request) {
     return "TEST";
 });
+Route::post('/units', function (Request $request) {
+
+    $unit = \App\Units::create($request->all());
+    
+    return response()->json([
+        'data'=> $unit,
+        'status' => 'success'
+    ]);
+});
 Route::get('/units', function (Request $request) {
 
     $unitQuery = \App\Units::query();
@@ -38,7 +47,7 @@ Route::get('/units', function (Request $request) {
     $units = $unitQuery->get();
 
     return response()->json([
-        'data'=>$units,
+        'data'=> $units,
         'status' => 'success'
     ]);
 });
