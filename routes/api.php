@@ -26,10 +26,21 @@ Route::post('/units', function (Request $request) {
         'status' => 'success'
     ]);
 });
+Route::put('/units/{id}', function (Request $request, $id) {
+
+    $unit = \App\Units::find($id);
+    $unit->update($request->all());
+
+    return response()->json([
+        'data'=> $unit,
+        'status' => 'success'
+    ]);
+});
 Route::delete('/units/{id}', function (Request $request, $id) {
 
     $unit = \App\Units::find($id);
     $unit->delete();
+
     return response()->json([
         'status' => 'mauragun ka man!'
     ]);
