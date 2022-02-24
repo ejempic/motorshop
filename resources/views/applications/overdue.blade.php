@@ -64,12 +64,12 @@
                             @foreach($applications as $data)
                                 <tr>
                                     <td>{{ $data->client->name }}</td>
-                                    <td>{{ $data->unit->engine_no .' - '. $data->unit->model }}</td>
+                                    <td>{{ optional($data->unit)->engine_no .' - '. optional($data->unit)->model }}</td>
                                     <td>{{ currency_format($data->total_price) }}</td>
                                     @if($status != 'completed')
                                         <td>{{ currency_format($data->rem_bal) }}</td>
                                     @endif
-                                    <td>{{ $data->unit->bnew_repo_display }}</td>
+                                    <td>{{ optional($data->unit)->bnew_repo_display }}</td>
                                     @if($status == 'completed')
                                         <td>{{ ucfirst($data->cash_installment) }}</td>
                                     @endif
